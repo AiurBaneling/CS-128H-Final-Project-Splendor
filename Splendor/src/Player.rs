@@ -2,15 +2,14 @@ use crate::Card::Card;
 use crate::Card::Colors;
 use std::collections::HashMap;
 use std::ops::Deref;
-use crate::Noble::Noble;
 use crate::Piles::{CardPile, StonePile};
 use std::rc::Rc;
 use std::cell::RefCell;
-
+/*
 pub struct Player {
     cards: Vec<Card>,
     stones: HashMap<Colors, i32>,
-    nobles: Vec<Noble>,
+    nobles: Vec<HashMap<Colors, i32>>,
     reserved_card: Vec<Card>,
     gold_count: i32,
     stone_pile: Rc<RefCell<StonePile>>,
@@ -137,6 +136,100 @@ impl Player {
         true
     }
     
+    pub fn add_noble(&mut self, noble: HashMap<Colors, i32>) {
+        self.nobles.push(noble);
+    }
     
     
+    
+}
+ */
+
+pub struct Player {
+    cards: Vec<Card>,
+    pub(crate) stones: HashMap<Colors, i32>,
+    nobles: Vec<HashMap<Colors, i32>>,
+    pub reserved_card: Vec<Card>,
+    gold_count: i32
+}
+
+impl Player {
+    pub fn new() -> Self {
+        Self {
+            cards:Vec::new(),
+            stones:HashMap::from([
+                (Colors::Red, 0),
+                (Colors::Green, 0),
+                (Colors::Blue, 0),
+                (Colors::Brown, 0),
+                (Colors::White, 0)
+            ]),
+            nobles:Vec::new(),
+            reserved_card:Vec::new(),
+            gold_count: 0,
+        }
+
+    }
+
+
+    pub fn count_score(&self) -> i32 {
+        let mut total = 0;
+        for card in self.cards.iter() {
+            total += card.get_score();
+        }
+        total += 3*self.nobles.len() as i32;
+        total
+    }
+
+    pub fn count_card_colors(&self) -> HashMap<Colors, i32> {
+        let mut all_colors: HashMap<Colors, i32> = HashMap::from([
+            (Colors::Red, 0),
+            (Colors::Green, 0),
+            (Colors::Blue, 0),
+            (Colors::Brown, 0),
+            (Colors::White, 0)
+        ]);
+        for card in self.cards.iter() {
+            *(all_colors.get_mut(&card.get_color()).unwrap()) += 1;
+        }
+        all_colors
+    }
+
+    pub fn add_noble(&mut self, noble: HashMap<Colors, i32>) {
+        self.nobles.push(noble);
+    }
+
+    pub fn add_card(&mut self, card: Card) {
+        self.cards.push(card);
+    }
+
+    pub fn add_stone(&mut self, color: Colors) {
+        *(self.stones.get_mut(&color).unwrap()) += 1;
+    }
+    
+    pub fn remove_stone(&mut self, color: Colors, num: i32) {
+        (*self.stones.get_mut(&color).unwrap()) -= num;
+    }
+    
+    pub fn get_stone(&self) -> HashMap<Colors, i32> {
+        self.stones.clone()
+    }
+
+    pub fn add_gold(&mut self) {
+        self.gold_count += 1;
+    }
+    pub fn get_gold_count(&self) -> i32 {
+        self.gold_count
+    }
+    
+    pub fn remove_gold(&mut self, num: i32) {
+        self.gold_count -= num;
+    }
+    
+    pub fn output(&self) {
+        todo!()
+    }
+
+
+
 }

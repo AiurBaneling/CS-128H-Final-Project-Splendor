@@ -40,13 +40,4 @@ impl Card {
     pub fn get_level(&self) -> i32 {
         self.level
     }
-    
-    
-    
-    
-    
-
-    
-
-
 }
