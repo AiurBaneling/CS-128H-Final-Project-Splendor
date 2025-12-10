@@ -225,9 +225,40 @@ impl Player {
     pub fn remove_gold(&mut self, num: i32) {
         self.gold_count -= num;
     }
-    
+
+
+
     pub fn output(&self) {
-        todo!()
+        println!("Total Score: {}", self.count_score());
+        print!("Stones processed:   ");
+        for color in self.stones.keys() {
+            if *(self.stones.get(color).unwrap()) != 0 {
+                print!("{}: {}  ", color, self.stones.get(color).unwrap());
+            }
+        }
+        print!("\n");
+        print!("Color Collected:   ");
+        let all_color = self.count_card_colors();
+        for color in all_color.keys() {
+            if *(all_color.get(color).unwrap()) != 0 {
+                print!("{}: {}  ", color, all_color.get(color).unwrap());
+            }
+        }
+        print!("\n");
+        println!("Gold Count: {}", self.gold_count);
+        print!("\n");
+        println!("Reserved Cards:");
+        if self.reserved_card.len() == 0 {
+            println!("No reserved card yet");
+        } else {
+            let mut index = 0;
+            for card in self.reserved_card.iter() {
+                println!("Card {}:", index);
+                card.output();
+                index += 1;
+            }
+        }
+        println!("---------------------------------------------------------");
     }
 
 
